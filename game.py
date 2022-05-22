@@ -39,8 +39,31 @@ class App():
         winWidth = int(self.L_SQUARE*18)
         winHeight = int(self.L_SQUARE*16)
         self.window= tkinter.Tk()
-
-        self.window.title("Rithmomachia")
+        if self.type==0:
+            title="Corpore"
+            title2="  (Max pieces="+str(self.winpieces)+")"
+        if self.type==1:
+            title="Bonis"
+            title2="  (Max points="+str(self.winpoints)+")"
+        if self.type==2:
+            title="Lite"
+            title2="  (Max points="+str(self.winpoints)+", Max digits="+str(self.windigits)+")"
+        if self.type==3:
+            title="Honore"
+            title2="  (Max pieces="+str(self.winpieces)+", Max points="+str(self.winpoints)+")"
+        if self.type==4:
+            title="Honore Litique"
+            title2="  (Max pieces="+str(self.winpieces)+", Max points="+str(self.winpoints)+", Max digits= "+str(self.windigits)+")"
+        if self.type==5:
+            title="Magna"
+            title2=""
+        if self.type==6:
+            title="Superior"
+            title2=""
+        if self.type==7:
+            title="Excelentísima"
+            title2=""
+        self.window.title("Rithmomachia-"+title+title2)
         self.window.iconbitmap(default='rithmomachia/chess.ico')
         x_window = self.window.winfo_screenwidth() // 2 - winWidth // 2
         y_window = self.window.winfo_screenheight() // 2 - 4*winHeight // 7
@@ -80,7 +103,7 @@ class App():
     def loadImages(self):
         pieces=["BC_03","BC_05","BC_07","BC_09","BC_25","BC_49","BC_81",
         "BC_02","BC_04","BC_06","BC_08","BC_16","BC_36","BC_64",
-        "BS_15","BS_25","BS_45","BS_81",
+        "BS_15","BS_25","BS_45","BS_81","BS_153","BS_169","BS_289",
         "BT_06","BT_09","BT_20","BT_25","BT_42","BT_49","BT_72","BT_81",
         "BS_28","BS_49","BS_66","BS_120","BS_121","BS_225","BS_361",
         "BT_12","BT_16","BT_30","BT_36","BT_56","BT_64","BT_90","BT_100",
@@ -154,168 +177,172 @@ class App():
         if self.playing:    
             SquareX=(int)(event.x/self.L_SQUARE)-4
             SquareY=(int)(event.y/self.L_SQUARE)+1
-
-            #Se borra si se selecciona una pieza ya seleccionada se borra la selección yy premovimientos sin problemas
-
-            if self.selected!=NULL:
-                self.interface.delete(self.selected)
-                for i in range(len(self.premoves)):
-                    self.interface.delete(self.premoves[i])
-                for i in range(len(self.irregulars)):
-                    self.interface.delete(self.irregulars[i])
-
-
-            if((self.pos[0]==SquareX) & (self.pos[1]==SquareY)):
-                self.premov.clear()
-                self.irregular.clear()
-                self.pos[0]= 0
-                self.pos[1]= 0
-            elif SquareX>8 and SquareY<=8:
-                if not self.turn:
-                    dpos=(SquareX-8)+(SquareY-1)*4
-                    self.selected = self.interface.create_rectangle((SquareX+4)*self.L_SQUARE,(SquareY-1)*self.L_SQUARE,(SquareX+5)*self.L_SQUARE,SquareY*self.L_SQUARE, fill="#FF7F50",stipple="gray75")
-                    for d in self.deleted:
-                        if str(d).startswith("W"):
-                            dpos=dpos-1
-                            if dpos==0:
-                                self.dpiece=d
-
-            elif SquareX>8 and SquareY>8:
-                if self.turn:
-                    dpos=(SquareX-8)+(SquareY-1)*4
-                    self.selected = self.interface.create_rectangle((SquareX+4)*self.L_SQUARE,(SquareY-1)*self.L_SQUARE,(SquareX+5)*self.L_SQUARE,SquareY*self.L_SQUARE, fill="#FF7F50",stipple="gray75")
-                    for d in self.deleted:
-                        if str(d).startswith("B"):
-                            dpos=dpos-1
-                            if dpos==0:
-                                self.dpiece=d
+            self.play(SquareX,SquareY)
+            
+    def play(self,SquareX,SquareY):
+        #Se borra si se selecciona una pieza ya seleccionada se borra la selección yy premovimientos sin problemas
+        print(SquareX)
+        print(SquareY)
+        if self.selected!=NULL:
+            self.interface.delete(self.selected)
+            for i in range(len(self.premoves)):
+                self.interface.delete(self.premoves[i])
+            for i in range(len(self.irregulars)):
+                self.interface.delete(self.irregulars[i])
 
 
+        if((self.pos[0]==SquareX) & (self.pos[1]==SquareY)):
+            self.premov.clear()
+            self.irregular.clear()
+            self.pos[0]= 0
+            self.pos[1]= 0
+        elif SquareX>8 and SquareY<=8:
+            if not self.turn:
+                dpos=(SquareX-8)+(SquareY-1)*4
+                self.selected = self.interface.create_rectangle((SquareX+4)*self.L_SQUARE,(SquareY-1)*self.L_SQUARE,(SquareX+5)*self.L_SQUARE,SquareY*self.L_SQUARE, fill="#FF7F50",stipple="gray75")
+                for d in self.deleted:
+                    if str(d).startswith("W"):
+                        dpos=dpos-1
+                        if dpos==0:
+                            self.dpiece=d
+
+        elif SquareX>8 and SquareY>8:
+            if self.turn:
+                dpos=(SquareX-8)+(SquareY-1)*4
+                self.selected = self.interface.create_rectangle((SquareX+4)*self.L_SQUARE,(SquareY-1)*self.L_SQUARE,(SquareX+5)*self.L_SQUARE,SquareY*self.L_SQUARE, fill="#FF7F50",stipple="gray75")
+                for d in self.deleted:
+                    if str(d).startswith("B"):
+                        dpos=dpos-1
+                        if dpos==0:
+                            self.dpiece=d
 
 
-            else:
-                self.pos[2]=self.pos[0]
-                self.pos[3]=self.pos[1]
-                self.pos[0]= SquareX
-                self.pos[1]= SquareY
-                i=0
-                if self.dpiece.startswith("W") and self.gs.pieces[SquareY-1][SquareX-1]=="" and SquareY<=8:
-                    self.gs.pieces,self.deleted=self.movement.revive(self.pos,self.gs.pieces,self.deleted,self.dpiece)
+
+
+        else:
+            self.pos[2]=self.pos[0]
+            self.pos[3]=self.pos[1]
+            self.pos[0]= SquareX
+            self.pos[1]= SquareY
+            i=0
+            if self.dpiece.startswith("W") and self.gs.pieces[SquareY-1][SquareX-1]=="" and SquareY<=8:
+                self.gs.pieces,self.deleted=self.movement.revive(self.pos,self.gs.pieces,self.deleted,self.dpiece)
+                self.moved=True
+                self.dpiece=""
+                self.showPieces()
+            elif self.dpiece.startswith("B") and self.gs.pieces[SquareY-1][SquareX-1]=="" and SquareY>8:
+                self.gs.pieces,self.deleted=self.movement.revive(self.pos,self.gs.pieces,self.deleted,self.dpiece)
+                self.moved=True
+                self.dpiece=""
+                self.showPieces()
+
+            #si se ha seleccionado la casilla de un premovimiento se mueve la pieza
+
+            while i<len(self.premov):
+                if((self.pos[0]==self.premov[i])&(self.pos[1]==self.premov[i+1])):
                     self.moved=True
-                    self.dpiece=""
-                    self.showPieces()
-                elif self.dpiece.startswith("B") and self.gs.pieces[SquareY-1][SquareX-1]=="" and SquareY>8:
-                    self.gs.pieces,self.deleted=self.movement.revive(self.pos,self.gs.pieces,self.deleted,self.dpiece)
-                    self.moved=True
-                    self.dpiece=""
-                    self.showPieces()
+                    for p in range(len(self.boardPieces)):
+                        self.interface.delete(self.boardPieces[p])
+                    self.gs.pieces=self.movement.move(self.pos,self.gs.pieces)
+                    if self.pos[3]==self.WP[1] and self.pos[2]==self.WP[0]:
 
-                #si se ha seleccionado la casilla de un premovimiento se mueve la pieza
+                        self.WP[0]=self.pos[0]
+                        self.WP[1]=self.pos[1]
+                    if self.pos[3]==self.BP[1] and self.pos[2]==self.BP[0]:
 
-                while i<len(self.premov):
-                    if((self.pos[0]==self.premov[i])&(self.pos[1]==self.premov[i+1])):
-                        self.moved=True
-                        for p in range(len(self.boardPieces)):
-                            self.interface.delete(self.boardPieces[p])
-                        self.gs.pieces=self.movement.move(self.pos,self.gs.pieces)
-                        if self.pos[3]==self.WP[1] and self.pos[2]==self.WP[0]:
+                        self.BP[0]=self.pos[0]
+                        self.BP[1]=self.pos[1]
 
-                            self.WP[0]=self.pos[0]
-                            self.WP[1]=self.pos[1]
-                        if self.pos[3]==self.BP[1] and self.pos[2]==self.BP[0]:
-
-                            self.BP[0]=self.pos[0]
-                            self.BP[1]=self.pos[1]
-
-                        #ya se ha movido ahora se ve si se puedee capturar alguna pieza, empezando por las piramides completas, luego se mira por cada pieza de la pirmaide
-                        self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList=self.movement.pyramidCapture(self.pos,self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList)
-                    
-                    i=i+2
-                    self.showPieces()
-                j=0
-                while j<len(self.irregular):
-                    if((self.pos[0]==self.irregular[j])&(self.pos[1]==self.irregular[j+1])):
-                        
-                        self.moved=True
-                        for p in range(len(self.boardPieces)):
-                            self.interface.delete(self.boardPieces[p])
-                        self.gs.pieces=self.movement.move(self.pos,self.gs.pieces)
-                        #Se elimina la pieza para que no pueda comer pues este es un movimiento irregular
-                        prepiece=self.gs.pieces[self.pos[1]-1][self.pos[0]-1]
-                        if self.gs.pieces[self.pos[1]-1][self.pos[0]-1].startswith("W"):
-                            self.gs.pieces[self.pos[1]-1][self.pos[0]-1]="Wd"
-                        if self.gs.pieces[self.pos[1]-1][self.pos[0]-1].startswith("B"):
-                            self.gs.pieces[self.pos[1]-1][self.pos[0]-1]="Bd"
-                        
-                        if self.pos[3]==self.WP[1] and self.pos[2]==self.WP[0]:
-
-                            self.WP[0]=self.pos[0]
-                            self.WP[1]=self.pos[1]
-                        if self.pos[3]==self.BP[1] and self.pos[2]==self.BP[0]:
-
-                            self.BP[0]=self.pos[0]
-                            self.BP[1]=self.pos[1]
-
-                        print(self.gs.pieces)
-                        #ya se ha movido ahora se ve si se puedee capturar alguna pieza, empezando por las piramides completas, luego se mira por cada pieza de la pirmaide
-                        self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList=self.movement.pyramidCapture(self.pos,self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList)
-                        self.gs.pieces[self.pos[1]-1][self.pos[0]-1]=prepiece
-                    j=j+2
-                    self.showPieces()
-            #Se borran los premovimientos y se crea la selección
-                self.premov.clear()
-                self.premoves.clear()
-                self.irregulars.clear()
-                self.irregular.clear()
-                self.selected = self.interface.create_rectangle((self.pos[0]+4)*self.L_SQUARE,(self.pos[1]-1)*self.L_SQUARE,(self.pos[0]+5)*self.L_SQUARE,self.pos[1]*self.L_SQUARE, fill="#FF7F50",stipple="gray75")
+                    #ya se ha movido ahora se ve si se puedee capturar alguna pieza, empezando por las piramides completas, luego se mira por cada pieza de la pirmaide
+                    self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList=self.movement.pyramidCapture(self.pos,self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList)
                 
-                #Se borra la selección si se ha movido
-                if self.moved==True:
-                    self.turn= not self.turn
-                    self.interface.delete(self.selected)
-                    self.moved=False
+                i=i+2
+                self.showPieces()
+            j=0
+            while j<len(self.irregular):
+                if((self.pos[0]==self.irregular[j])&(self.pos[1]==self.irregular[j+1])):
+                    
+                    self.moved=True
+                    for p in range(len(self.boardPieces)):
+                        self.interface.delete(self.boardPieces[p])
+                    self.gs.pieces=self.movement.move(self.pos,self.gs.pieces)
+                    #Se elimina la pieza para que no pueda comer pues este es un movimiento irregular
+                    prepiece=self.gs.pieces[self.pos[1]-1][self.pos[0]-1]
+                    if self.gs.pieces[self.pos[1]-1][self.pos[0]-1].startswith("W"):
+                        self.gs.pieces[self.pos[1]-1][self.pos[0]-1]="Wd"
+                    if self.gs.pieces[self.pos[1]-1][self.pos[0]-1].startswith("B"):
+                        self.gs.pieces[self.pos[1]-1][self.pos[0]-1]="Bd"
+                    
+                    if self.pos[3]==self.WP[1] and self.pos[2]==self.WP[0]:
 
+                        self.WP[0]=self.pos[0]
+                        self.WP[1]=self.pos[1]
+                    if self.pos[3]==self.BP[1] and self.pos[2]==self.BP[0]:
 
-                    #Si no se ha movido se imprimen los posibles premovimientos de la ficha
-                else:
+                        self.BP[0]=self.pos[0]
+                        self.BP[1]=self.pos[1]
 
-                    if str(self.gs.pieces[self.pos[1]-1][self.pos[0]-1]).startswith("W") and self.turn:
-                        self.premov=self.movement.premove(self.pos,self.gs.pieces,self.WPyramid)
-                        self.irregular=self.movement.preirregular(self.pos,self.gs.pieces,self.WPyramid)
-
-                        i=0
-                        while i<len(self.premov):
-                            if (0<self.premov[i]<9) & (0<self.premov[i+1]<17):
-                                self.premoves.append(self.interface.create_rectangle((self.premov[i]+4)*self.L_SQUARE,(self.premov[i+1]-1)*self.L_SQUARE,(self.premov[i]+5)*self.L_SQUARE,self.premov[i+1]*self.L_SQUARE, fill="#FF7F50",stipple="gray50"))
-                            i=i+2
-                        j=0
-                        while j<len(self.irregular):
-                            if (0<self.irregular[j]<9) & (0<self.irregular[j+1]<17):
-                                self.irregulars.append(self.interface.create_rectangle((self.irregular[j]+4)*self.L_SQUARE,(self.irregular[j+1]-1)*self.L_SQUARE,(self.irregular[j]+5)*self.L_SQUARE,self.irregular[j+1]*self.L_SQUARE, fill="#008000",stipple="gray50"))
-                            j=j+2
-                    elif str(self.gs.pieces[self.pos[1]-1][self.pos[0]-1]).startswith("B") and not self.turn:
-                        self.premov=self.movement.premove(self.pos,self.gs.pieces,self.BPyramid).copy()
-                        self.irregular=self.movement.preirregular(self.pos,self.gs.pieces,self.WPyramid)
-                        i=0
-                        while i<len(self.premov):
-                            if (0<self.premov[i]<9) & (0<self.premov[i+1]<17):
-                                self.premoves.append(self.interface.create_rectangle((self.premov[i]+4)*self.L_SQUARE,(self.premov[i+1]-1)*self.L_SQUARE,(self.premov[i]+5)*self.L_SQUARE,self.premov[i+1]*self.L_SQUARE, fill="#FF7F50",stipple="gray50"))
-                            i=i+2
-                        j=0
-                        while j<len(self.irregular):
-                            if (0<self.irregular[j]<9) & (0<self.irregular[j+1]<17):
-                                self.irregulars.append(self.interface.create_rectangle((self.irregular[j]+4)*self.L_SQUARE,(self.irregular[j+1]-1)*self.L_SQUARE,(self.irregular[j]+5)*self.L_SQUARE,self.irregular[j+1]*self.L_SQUARE, fill="#008000",stipple="gray50"))
+                    print(self.gs.pieces)
+                    #ya se ha movido ahora se ve si se puedee capturar alguna pieza, empezando por las piramides completas, luego se mira por cada pieza de la pirmaide
+                    self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList=self.movement.pyramidCapture(self.pos,self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList)
+                    self.gs.pieces[self.pos[1]-1][self.pos[0]-1]=prepiece
+                j=j+2
+                self.showPieces()
+        #Se borran los premovimientos y se crea la selección
+            self.premov.clear()
+            self.premoves.clear()
+            self.irregulars.clear()
+            self.irregular.clear()
+            self.selected = self.interface.create_rectangle((self.pos[0]+4)*self.L_SQUARE,(self.pos[1]-1)*self.L_SQUARE,(self.pos[0]+5)*self.L_SQUARE,self.pos[1]*self.L_SQUARE, fill="#FF7F50",stipple="gray75")
             
-                            j=j+2
-            
-            win=self.gs.win(self.type,self.winpieces,self.winpoints,self.windigits,self.gs.pieces,self.deletedList,self.WPyramid,self.BPyramid,self.WP,self.BP)
-            if win is not NULL:
-                if win is True:
-                    self.endgame("B")
-                elif win is False:
-                    self.endgame("W")
-                elif win is None:
-                    self.endgame("D")
+            #Se borra la selección si se ha movido
+            if self.moved==True:
+                self.turn= not self.turn
+                self.interface.delete(self.selected)
+                self.moved=False
+
+
+                #Si no se ha movido se imprimen los posibles premovimientos de la ficha
+            else:
+
+                if str(self.gs.pieces[self.pos[1]-1][self.pos[0]-1]).startswith("W") and self.turn:
+                    self.premov=self.movement.premove(self.pos,self.gs.pieces,self.WPyramid)
+                    self.irregular=self.movement.preirregular(self.pos,self.gs.pieces,self.WPyramid)
+
+                    i=0
+                    while i<len(self.premov):
+                        if (0<self.premov[i]<9) & (0<self.premov[i+1]<17):
+                            self.premoves.append(self.interface.create_rectangle((self.premov[i]+4)*self.L_SQUARE,(self.premov[i+1]-1)*self.L_SQUARE,(self.premov[i]+5)*self.L_SQUARE,self.premov[i+1]*self.L_SQUARE, fill="#FF7F50",stipple="gray50"))
+                        i=i+2
+                    j=0
+                    while j<len(self.irregular):
+                        if (0<self.irregular[j]<9) & (0<self.irregular[j+1]<17):
+                            self.irregulars.append(self.interface.create_rectangle((self.irregular[j]+4)*self.L_SQUARE,(self.irregular[j+1]-1)*self.L_SQUARE,(self.irregular[j]+5)*self.L_SQUARE,self.irregular[j+1]*self.L_SQUARE, fill="#008000",stipple="gray50"))
+                        j=j+2
+                elif str(self.gs.pieces[self.pos[1]-1][self.pos[0]-1]).startswith("B") and not self.turn:
+                    self.premov=self.movement.premove(self.pos,self.gs.pieces,self.BPyramid).copy()
+                    self.irregular=self.movement.preirregular(self.pos,self.gs.pieces,self.WPyramid)
+                    i=0
+                    while i<len(self.premov):
+                        if (0<self.premov[i]<9) & (0<self.premov[i+1]<17):
+                            self.premoves.append(self.interface.create_rectangle((self.premov[i]+4)*self.L_SQUARE,(self.premov[i+1]-1)*self.L_SQUARE,(self.premov[i]+5)*self.L_SQUARE,self.premov[i+1]*self.L_SQUARE, fill="#FF7F50",stipple="gray50"))
+                        i=i+2
+                    j=0
+                    while j<len(self.irregular):
+                        if (0<self.irregular[j]<9) & (0<self.irregular[j+1]<17):
+                            self.irregulars.append(self.interface.create_rectangle((self.irregular[j]+4)*self.L_SQUARE,(self.irregular[j+1]-1)*self.L_SQUARE,(self.irregular[j]+5)*self.L_SQUARE,self.irregular[j+1]*self.L_SQUARE, fill="#008000",stipple="gray50"))
+        
+                        j=j+2
+        
+        win=self.gs.win(self.type,self.winpieces,self.winpoints,self.windigits,self.gs.pieces,self.deletedList,self.WPyramid,self.BPyramid,self.WP,self.BP)
+        if win is not NULL:
+            if win is True:
+                self.endgame("B")
+            elif win is False:
+                self.endgame("W")
+            elif win is None:
+                self.endgame("D")
+        return self.playing
 
     def endgame(self,winner):
         print("+++++++++++++++++++++++++++++++++")
@@ -335,6 +362,8 @@ class App():
             tkinter.Label(top, text= "\n      White WIN", font=('Times 18 bold')).grid(row=1,column=1)
         if str(winner).startswith("B"):
             tkinter.Label(top, text= "\n      Black WIN", font=('Times 18 bold')).grid(row=1,column=1)
+
+        
 
 
 

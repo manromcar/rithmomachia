@@ -1615,20 +1615,20 @@ class Move():
 
         return pieces,deleted  
     def pyramidCapture(self,pos,pieces,deleted,WPyramid,BPyramid,WP,BP,deletedList):
-        # d=False
-        # temp=""
+        d=False
+        temp=""
         if WPyramid!=[] and BPyramid!=[]:
             #mira primero si se puede eliminar la piramide entera
             pieces[WP[1]-1][WP[0]-1]="WP_"+str(WP[2])
             pieces[BP[1]-1][BP[0]-1]="BP_"+str(BP[2])
-            # if pieces[pos[1]-1][pos[0]-1].startswith("Wd") or pieces[pos[1]-1][pos[0]-1].startswith("Bd"):
-            #     d=True
-            #     temp=pieces[pos[1]-1][pos[0]-1]
+            if pieces[pos[1]-1][pos[0]-1].startswith("Wd") or pieces[pos[1]-1][pos[0]-1].startswith("Bd"):
+                d=True
+                temp=pieces[pos[1]-1][pos[0]-1]
             pieces,deleted,deletedList=self.canCapture(pos,pieces,deleted,WPyramid,BPyramid,deletedList)
             
-            # if d:
-            #     d=False
-            #     pieces[pos[1]-1][pos[0]-1]=temp
+            if d:
+                d=False
+                pieces[pos[1]-1][pos[0]-1]=temp
             if pieces[WP[1]-1][WP[0]-1]!="":
                 pieces[WP[1]-1][WP[0]-1]="WP"
             else:
@@ -1718,13 +1718,13 @@ class Move():
 
                 for q in BPyramid:
                     pieces[BP[1]-1][BP[0]-1]=q
-                    # if pieces[pos[1]-1][pos[0]-1].startswith("Wd") or pieces[pos[1]-1][pos[0]-1].startswith("Bd"):
-                    #     d=True
-                    #     temp=pieces[pos[1]-1][pos[0]-1]
+                    if pieces[pos[1]-1][pos[0]-1].startswith("Wd") or pieces[pos[1]-1][pos[0]-1].startswith("Bd"):
+                        d=True
+                        temp=pieces[pos[1]-1][pos[0]-1]
                     pieces,deleted,deletedList=self.canCapture(pos,pieces,deleted,WPyramid,BPyramid,deletedList)
-                    # if d:
-                    #     d=False
-                    #     pieces[pos[1]-1][pos[0]-1]=temp
+                    if d:
+                        d=False
+                        pieces[pos[1]-1][pos[0]-1]=temp
                     #mira si alguna pieza de la piramide se ha eliminado y la quita de la lista a la vez que la quista de la lista de piezas eliminadas
                     
                     if pieces[BP[1]-1][BP[0]-1]!=q:
@@ -1754,8 +1754,8 @@ class Move():
         markpos=[]
         piece=str(pieces[pos[1]-1][pos[0]-1])
         if piece.startswith("W"):
-            # if piece.startswith("Wd"):
-            #     pieces[pos[1]-1][pos[0]-1]="d"
+            if piece.startswith("Wd"):
+                pieces[pos[1]-1][pos[0]-1]="d"
             for j in range(16):
                 for i in range(8):
                     
@@ -2013,8 +2013,8 @@ class Move():
             
 
         if piece.startswith("B"):
-            # if piece.startswith("Bd"):
-            #     pieces[pos[1]-1][pos[0]-1]="d"
+            if piece.startswith("Bd"):
+                pieces[pos[1]-1][pos[0]-1]="d"
             for j in range(16):
                 for i in range(8):
                     
@@ -2142,6 +2142,9 @@ class Move():
                                 if str(pieces[j-n][i])!="":
                                     if str(pieces[j-n][i]).startswith("B"):
                                         up=False
+                                        print(pieces[j-n][i])
+                                        print(int(str(pieces[j-n][i])[str(pieces[j-n][i]).index("_")+1:]))
+
                                         numW=int(str(pieces[j-n][i])[str(pieces[j-n][i]).index("_")+1:])
                                         if (numB*n==numW) | (numB/n==numW):
                                             deleted.append(str(pieces[j][i]))
