@@ -2,6 +2,7 @@ from asyncio.windows_events import NULL
 from contextlib import nullcontext
 from gettext import NullTranslations
 import tkinter
+
 import machiaEngine
 import os
 from turtle import window_width
@@ -116,6 +117,7 @@ class App():
         directory=os.getcwd()
         directory.replace("\\","/")
         for piece in pieces:
+            
             self.images[piece] = tkinter.PhotoImage(file=directory+"/rithmomachia/iloveimg-resized/"+ piece +".png")
 
     def showPieces(self):
@@ -181,15 +183,13 @@ class App():
             
     def play(self,SquareX,SquareY):
         #Se borra si se selecciona una pieza ya seleccionada se borra la selección yy premovimientos sin problemas
-        print(SquareX)
-        print(SquareY)
+
         if self.selected!=NULL:
             self.interface.delete(self.selected)
             for i in range(len(self.premoves)):
                 self.interface.delete(self.premoves[i])
             for i in range(len(self.irregulars)):
                 self.interface.delete(self.irregulars[i])
-
 
         if((self.pos[0]==SquareX) & (self.pos[1]==SquareY)):
             self.premov.clear()
@@ -205,17 +205,15 @@ class App():
                         dpos=dpos-1
                         if dpos==0:
                             self.dpiece=d
-
         elif SquareX>8 and SquareY>8:
             if self.turn:
-                dpos=(SquareX-8)+(SquareY-1)*4
+                dpos=(SquareX-8)+(16-SquareY)*4
                 self.selected = self.interface.create_rectangle((SquareX+4)*self.L_SQUARE,(SquareY-1)*self.L_SQUARE,(SquareX+5)*self.L_SQUARE,SquareY*self.L_SQUARE, fill="#FF7F50",stipple="gray75")
                 for d in self.deleted:
                     if str(d).startswith("B"):
                         dpos=dpos-1
                         if dpos==0:
                             self.dpiece=d
-
 
 
 
@@ -239,7 +237,8 @@ class App():
             #si se ha seleccionado la casilla de un premovimiento se mueve la pieza
 
             while i<len(self.premov):
-                if((self.pos[0]==self.premov[i])&(self.pos[1]==self.premov[i+1])):
+                if((self.pos[0]==self.premov[i])and(self.pos[1]==self.premov[i+1])):
+                    
                     self.moved=True
                     for p in range(len(self.boardPieces)):
                         self.interface.delete(self.boardPieces[p])
@@ -254,10 +253,12 @@ class App():
                         self.BP[1]=self.pos[1]
 
                     #ya se ha movido ahora se ve si se puedee capturar alguna pieza, empezando por las piramides completas, luego se mira por cada pieza de la pirmaide
+                    
                     self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList=self.movement.pyramidCapture(self.pos,self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList)
-                
+                    
+                    self.showPieces()
                 i=i+2
-                self.showPieces()
+                   
             j=0
             while j<len(self.irregular):
                 if((self.pos[0]==self.irregular[j])&(self.pos[1]==self.irregular[j+1])):
@@ -282,12 +283,13 @@ class App():
                         self.BP[0]=self.pos[0]
                         self.BP[1]=self.pos[1]
 
-                    print(self.gs.pieces)
+                    
                     #ya se ha movido ahora se ve si se puedee capturar alguna pieza, empezando por las piramides completas, luego se mira por cada pieza de la pirmaide
                     self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList=self.movement.pyramidCapture(self.pos,self.gs.pieces,self.deleted,self.WPyramid,self.BPyramid,self.WP,self.BP,self.deletedList)
                     self.gs.pieces[self.pos[1]-1][self.pos[0]-1]=prepiece
+                    self.showPieces()
                 j=j+2
-                self.showPieces()
+                
         #Se borran los premovimientos y se crea la selección
             self.premov.clear()
             self.premoves.clear()
@@ -306,9 +308,11 @@ class App():
             else:
 
                 if str(self.gs.pieces[self.pos[1]-1][self.pos[0]-1]).startswith("W") and self.turn:
+                    
                     self.premov=self.movement.premove(self.pos,self.gs.pieces,self.WPyramid)
+                    
                     self.irregular=self.movement.preirregular(self.pos,self.gs.pieces,self.WPyramid)
-
+                    
                     i=0
                     while i<len(self.premov):
                         if (0<self.premov[i]<9) & (0<self.premov[i+1]<17):
@@ -342,11 +346,13 @@ class App():
                 self.endgame("W")
             elif win is None:
                 self.endgame("D")
-        return self.playing
+        #soluciona un problema de imagen en la piramide
+        del SquareX
+        del SquareY
+
+        return self
 
     def endgame(self,winner):
-        print("+++++++++++++++++++++++++++++++++")
-        print(str(winner))
         self.playing=False
         top= tkinter.Toplevel(self.window)
         topWidth=200
@@ -363,7 +369,10 @@ class App():
         if str(winner).startswith("B"):
             tkinter.Label(top, text= "\n      Black WIN", font=('Times 18 bold')).grid(row=1,column=1)
 
-        
+    def quit(self):
+        self.window.destroy()
+
+
 
 
 

@@ -437,7 +437,8 @@ class GameState():
                                     y=y+2
                         j=j+2
                     i=i+2
-            
+            pieces[WP[1]-1][WP[0]-1]="WP"  
+            pieces[BP[1]-1][BP[0]-1]="BP" 
             if wcount and bcount:
                 return None
             elif wcount:
@@ -815,7 +816,8 @@ class GameState():
                                     y=y+2
                         j=j+2
                     i=i+2
-                    
+            pieces[WP[1]-1][WP[0]-1]="WP"  
+            pieces[BP[1]-1][BP[0]-1]="BP"         
             if wcount and bcount:
                 return None
             elif wcount:
@@ -1387,7 +1389,8 @@ class GameState():
                                     y=y+2
                         j=j+2
                     i=i+2
-                        
+            pieces[WP[1]-1][WP[0]-1]="WP"  
+            pieces[BP[1]-1][BP[0]-1]="BP"            
             if wcount and bcount:
                 return None
             elif wcount:
@@ -1449,6 +1452,8 @@ class Move():
                         qieces[pos[1]-1][pos[0]-1]=p
                         self.premov=self.premov+self.premove(pos,qieces,pyramid)
                         S=False
+                
+                
 
 
             elif newPiece.startswith("C"):
@@ -1507,7 +1512,6 @@ class Move():
     def preirregular(self,pos,pieces,pyramid):
         self.irregular=[]
         piece=str(pieces[pos[1]-1][pos[0]-1])
-        print(pieces[pos[1]-1][pos[0]-1])
         if piece=="":
             return self.irregular
         
@@ -2142,9 +2146,7 @@ class Move():
                                 if str(pieces[j-n][i])!="":
                                     if str(pieces[j-n][i]).startswith("B"):
                                         up=False
-                                        print(pieces[j-n][i])
-                                        print(int(str(pieces[j-n][i])[str(pieces[j-n][i]).index("_")+1:]))
-
+                                        
                                         numW=int(str(pieces[j-n][i])[str(pieces[j-n][i]).index("_")+1:])
                                         if (numB*n==numW) | (numB/n==numW):
                                             deleted.append(str(pieces[j][i]))

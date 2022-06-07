@@ -14,14 +14,23 @@ class NonBinTree:
                 res= node
                 val= node.val
         return res
+    def get(self,val):
+        res=0
+        for n in self.nodes:
+            if val==n.val:
+                res=n
+        return res
 
 
 a = NonBinTree(0)
 a.add_node(1)
 a.add_node(3)
 a.add_node(4)
-print(a.max())
-for x in a.nodes:
-    print(x)
+
+print(a.nodes[0])
+# else:
+#     for x in a.nodes:
+#         print(x)
+#     turn=True
 
 

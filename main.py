@@ -24,7 +24,6 @@ def defineValues(n):
                 tkinter.Label(window2, text="Max pieces:").grid(row=2)
                 e = tkinter.Entry(window2,textvariable=capNum)
                 e.grid(row=2, column=1)
-                print()
                 isIntButton=tkinter.Button(window2,text="Corpore",font=("Times bold",12),command=lambda:IsInt(n,window2,capNum.get()),width=20)
                 isIntButton.grid(row=3, column=1)
                 window2.mainloop()
