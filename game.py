@@ -65,7 +65,7 @@ class App():
             title="Excelentísima"
             title2=""
         self.window.title("Rithmomachia-"+title+title2)
-        self.window.iconbitmap(default='rithmomachia/chess.ico')
+        self.window.iconbitmap(default='./chess.ico')
         x_window = self.window.winfo_screenwidth() // 2 - winWidth // 2
         y_window = self.window.winfo_screenheight() // 2 - 4*winHeight // 7
 
@@ -118,7 +118,7 @@ class App():
         directory.replace("\\","/")
         for piece in pieces:
             
-            self.images[piece] = tkinter.PhotoImage(file=directory+"/rithmomachia/iloveimg-resized/"+ piece +".png")
+            self.images[piece] = tkinter.PhotoImage(file=directory+"/images/"+ piece +".png")
 
     def showPieces(self):
         row=0

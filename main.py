@@ -72,7 +72,7 @@ def defineValues(n):
                 capNum=tkinter.IntVar()
                 capNum2=tkinter.IntVar()
                 capNum3=tkinter.IntVar()
-                tkinter.Label(window2, text="Now we establish the points, pieces and digits needed to be captured to win").grid(row=1,columnspan=2)
+                tkinter.Label(window2, text="Now we establish the points, pieces and digits needed to win").grid(row=1,columnspan=2)
                 tkinter.Label(window2,font=("Times bold",7), text="(We only accept Integer numbers bigger than 0, if a decimal number is \n used It would be replaced for the integer part only)").grid(row=7,columnspan=2)
 
                 tkinter.Label(window2, text="Max pieces:").grid(row=2)

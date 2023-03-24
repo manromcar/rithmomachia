@@ -1362,25 +1362,38 @@ class GameState():
                                                         #miramos si estan en linea recta paralela a eje x 
                                                         if Bteam[i]-Bteam[i+1]==Bteam[x]-Bteam[x+1] or (Bteam[i+1]==Bteam[x+1] and (Bteam[j]==Bteam[x] or Bteam[y]==Bteam[x])) or (Bteam[i]==Bteam[x] and (Bteam[j+1]==Bteam[x+1] or Bteam[y+1]==Bteam[x+1])) or (Bteam[j]==Bteam[x] and Bteam[y+1]==Bteam[x+1]) or (Bteam[j+1]==Bteam[x+1] and Bteam[y]==Bteam[x]):
                                                             poswin4=Bteam[x][x+1]
+                                                            ari=True
+                                                            geo=True
+                                                            arm=True
+
                                                             poswin4=poswin4[poswin4.index("_")+1:]
-                                                            if Move.arithmetic(poswin,poswin2,poswin4) :
+                                                            if Move.arithmetic(poswin,poswin2,poswin4) and ari:
                                                                 count=count+1
-                                                            if Move.arithmetic(poswin,poswin3,poswin4):
+                                                                ari=False
+                                                            if Move.arithmetic(poswin,poswin3,poswin4) and ari:
                                                                 count=count+1
-                                                            if Move.arithmetic(poswin2,poswin3,poswin4):
+                                                                ari=False
+                                                            if Move.arithmetic(poswin2,poswin3,poswin4) and ari:
                                                                 count=count+1
-                                                            if Move.geometric(poswin,poswin2,poswin4) :
+                                                                ari=False
+                                                            if Move.geometric(poswin,poswin2,poswin4) and geo:
                                                                 count=count+1
-                                                            if Move.geometric(poswin,poswin3,poswin4) :
+                                                                geo=False
+                                                            if Move.geometric(poswin,poswin3,poswin4) and geo:
                                                                 count=count+1
-                                                            if Move.geometric(poswin2,poswin3,poswin4) :
+                                                                geo=False
+                                                            if Move.geometric(poswin2,poswin3,poswin4) and geo:
                                                                 count=count+1
-                                                            if Move.armonic(poswin,poswin2,poswin4) :
+                                                                geo=False
+                                                            if Move.armonic(poswin,poswin2,poswin4) and arm:
                                                                 count=count+1
-                                                            if Move.armonic(poswin,poswin3,poswin4) :
+                                                                arm=False
+                                                            if Move.armonic(poswin,poswin3,poswin4) and arm:
                                                                 count=count+1
-                                                            if Move.armonic(poswin2,poswin3,poswin4):
+                                                                arm=False
+                                                            if Move.armonic(poswin2,poswin3,poswin4)and arm:
                                                                 count=count+1
+                                                                arm=False
                                                             if count>1:
                                                                 bcount==True
                                                             else:
